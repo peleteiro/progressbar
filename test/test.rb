@@ -51,9 +51,9 @@ class ProgressBarTest < Test::Unit::TestCase
   end
 
   def test_inc_x
-    total = File.size("../lib/progressbar.rb")
+    total = File.size("lib/progressbar.rb")
     pbar = do_make_progress_bar("test(inc(x))", total)
-    File.new("../lib/progressbar.rb").each {|line|
+    File.new("lib/progressbar.rb").each {|line|
       sleep(SleepUnit)
       pbar.inc(line.length)
     }
@@ -95,6 +95,17 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar = do_make_progress_bar("test(total=0)", total)
     pbar.finish
   end
+
+  def test_custom_bar_mark
+    total = 100
+    pbar = do_make_progress_bar("test(custom)", total)
+    pbar.bar_mark = '='
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
 end
 
 class ReversedProgressBarTest < ProgressBarTest
@@ -102,4 +113,3 @@ class ReversedProgressBarTest < ProgressBarTest
     ReversedProgressBar.new(title, total)
   end
 end
-
