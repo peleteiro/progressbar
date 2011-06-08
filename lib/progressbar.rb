@@ -33,12 +33,13 @@ class ProgressBar
   attr_reader   :current
   attr_reader   :total
   attr_accessor :start_time
+  attr_writer   :bar_mark
 
   private
   def fmt_bar
     bar_width = do_percentage * @terminal_width / 100
-    sprintf("|%s%s|", 
-            @bar_mark * bar_width, 
+    sprintf("|%s%s|",
+            @bar_mark * bar_width,
             " " *  (@terminal_width - bar_width))
   end
 
@@ -51,9 +52,9 @@ class ProgressBar
   end
 
   def fmt_stat_for_file_transfer
-    if @finished_p then 
+    if @finished_p then
       sprintf("%s %s %s", bytes, transfer_rate, elapsed)
-    else 
+    else
       sprintf("%s %s %s", bytes, transfer_rate, eta)
     end
   end
@@ -106,7 +107,7 @@ class ProgressBar
     elapsed = Time.now - @start_time
     sprintf("Time: %s", format_time(elapsed))
   end
-  
+
   def eol
     if @finished_p then "\n" else "\r" end
   end
@@ -137,14 +138,14 @@ class ProgressBar
   end
 
   def show
-    arguments = @format_arguments.map {|method| 
+    arguments = @format_arguments.map {|method|
       method = sprintf("fmt_%s", method)
       send(method)
     }
     line = sprintf(@format, *arguments)
 
     width = get_width
-    if line.length == width - 1 
+    if line.length == width - 1
       @out.print(line + eol)
       @out.flush
     elsif line.length >= width
@@ -167,7 +168,7 @@ class ProgressBar
     end
 
     # Use "!=" instead of ">" to support negative changes
-    if cur_percentage != prev_percentage || 
+    if cur_percentage != prev_percentage ||
         Time.now - @previous_time >= 1 || @finished_p
       show
     end
@@ -233,4 +234,3 @@ class ReversedProgressBar < ProgressBar
     100 - super
   end
 end
-
