@@ -15,7 +15,6 @@ tmtags
 
 ## PROJECT::GENERAL
 .document
-progressbar.gemspec
 coverage
 rdoc
 pkg
