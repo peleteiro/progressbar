@@ -120,21 +120,8 @@ class ProgressBar
     end
   end
 
-  def get_width
-    # FIXME: I don't know how portable it is.
-    default_width = 80
-    begin
-      tiocgwinsz = 0x5413
-      data = [0, 0, 0, 0].pack("SSSS")
-      if @out.ioctl(tiocgwinsz, data) >= 0 then
-        rows, cols, xpixels, ypixels = data.unpack("SSSS")
-        if cols >= 0 then cols else default_width end
-      else
-        default_width
-      end
-    rescue Exception
-      default_width
-    end
+  def get_term_width
+    `tput cols`.to_i
   end
 
   def show
@@ -144,7 +131,7 @@ class ProgressBar
     }
     line = sprintf(@format, *arguments)
 
-    width = get_width
+    width = get_term_width
     if line.length == width - 1
       @out.print(line + eol)
       @out.flush
@@ -177,7 +164,7 @@ class ProgressBar
   public
   def clear
     @out.print "\r"
-    @out.print(" " * (get_width - 1))
+    @out.print(" " * (get_term_width - 1))
     @out.print "\r"
   end
 
