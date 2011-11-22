@@ -126,15 +126,19 @@ private
   def get_term_width
     if ENV['COLUMNS'] =~ /^\d+$/
       ENV['COLUMNS'].to_i
-    elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && command_exists?('tput')
+    elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && shell_command_exists?('tput')
       `tput cols`.to_i
-    elsif STDIN.tty? && command_exists?('stty')
+    elsif STDIN.tty? && shell_command_exists?('stty')
       `stty size`.scan(/\d+/).map { |s| s.to_i }.reverse[0]
     else
       DEFAULT_WIDTH
     end
   rescue
     DEFAULT_WIDTH
+  end
+
+  def shell_command_exists?(command)
+    ENV['PATH'].split(File::PATH_SEPARATOR).any?{|d| File.exists? File.join(d, command) }
   end
 
   def show
