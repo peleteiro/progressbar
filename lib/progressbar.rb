@@ -129,7 +129,7 @@ private
     elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && shell_command_exists?('tput')
       `tput cols`.to_i
     elsif STDIN.tty? && shell_command_exists?('stty')
-      `stty size`.scan(/\d+/).map { |s| s.to_i }.reverse[0]
+      `stty size`.scan(/\d+/).map { |s| s.to_i }[1]
     else
       DEFAULT_WIDTH
     end
