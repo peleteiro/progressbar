@@ -29,13 +29,15 @@ class ProgressBar
     clear
     show
   end
+
   attr_reader   :title
   attr_reader   :current
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
 
-  private
+private
+
   def fmt_bar
     bar_width = do_percentage * @terminal_width / 100
     sprintf("|%s%s|",
@@ -120,8 +122,19 @@ class ProgressBar
     end
   end
 
+  DEFAULT_WIDTH = 80
   def get_term_width
-    `tput cols`.to_i
+    if ENV['COLUMNS'] =~ /^\d+$/
+      ENV['COLUMNS'].to_i
+    elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && command_exists?('tput')
+      `tput cols`.to_i
+    elsif STDIN.tty? && command_exists?('stty')
+      `stty size`.scan(/\d+/).map { |s| s.to_i }.reverse[0]
+    else
+      DEFAULT_WIDTH
+    end
+  rescue
+    DEFAULT_WIDTH
   end
 
   def show
@@ -161,7 +174,8 @@ class ProgressBar
     end
   end
 
-  public
+public
+
   def clear
     @out.print "\r"
     @out.print(" " * (get_term_width - 1))
@@ -214,6 +228,7 @@ class ProgressBar
   def inspect
     "#<ProgressBar:#{@current}/#{@total}>"
   end
+
 end
 
 class ReversedProgressBar < ProgressBar
