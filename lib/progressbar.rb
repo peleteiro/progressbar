@@ -91,7 +91,7 @@ private
     sec = t % 60
     min  = (t / 60) % 60
     hour = t / 3600
-    sprintf("%02d:%02d:%02d", hour, min, sec);
+    sprintf("% 3d:%02d:%02d", hour, min, sec);
   end
 
   # ETA stands for Estimated Time of Arrival.
@@ -101,7 +101,7 @@ private
     else
       elapsed = Time.now - @start_time
       eta = elapsed * @total / @current - elapsed;
-      sprintf("ETA:  %s", format_time(eta))
+      sprintf("ETA: %s", format_time(eta))
     end
   end
 
