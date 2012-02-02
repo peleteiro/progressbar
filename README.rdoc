@@ -76,6 +76,10 @@ The latest version of Ruby/ProgressBar is available at
     Use  :stat_for_file_transfer instead of :stat to display
     transfered bytes and transfer rate.
 
+--- ProgressBar#long_running
+    Use adaptative running average ton compute ETA, more effective for
+    long-running jobs of jobs whose pseed may vary.
+
 
 ReverseProgressBar class is also available.  The
 functionality is identical to ProgressBar but the direction

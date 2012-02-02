@@ -53,6 +53,10 @@ private
     if @finished_p then elapsed else eta end
   end
 
+  def fmt_stat_for_long_run
+    if @finished_p then elapsed else eta_running_average end
+  end
+
   def fmt_stat_for_file_transfer
     if @finished_p then
       sprintf("%s %s %s", bytes, transfer_rate, elapsed)
@@ -102,6 +106,34 @@ private
       elapsed = Time.now - @start_time
       eta = elapsed * @total / @current - elapsed;
       sprintf("ETA: %s", format_time(eta))
+    end
+  end
+
+  # Compute ETA with running average (better suited to long running tasks)
+  def eta_running_average
+    now = Time.now
+
+    # update throughput running average
+    if @total > 0 && @eta_previous && @eta_previous_time
+      current_elapsed = @current - @eta_previous
+      alpha = 0.9 ** current_elapsed
+      current_progress = 1.0 * current_elapsed
+      current_throughput = current_progress / (now - @eta_previous_time)
+      if @eta_throughput
+        @eta_throughput = @eta_throughput * alpha + current_throughput * (1-alpha)
+      else
+        @eta_throughput = current_throughput
+      end
+    end
+
+    @eta_previous = @current
+    @eta_previous_time = now
+
+    if @eta_throughput && @eta_throughput > 0
+      eta = (@total - @current) / @eta_throughput;
+      sprintf("ETA: %s", format_time(eta))
+    else
+      "ETA:  --:--:--"
     end
   end
 
@@ -198,6 +230,10 @@ public
 
   def file_transfer_mode
     @format_arguments = [:title, :percentage, :bar, :stat_for_file_transfer]
+  end
+
+  def long_running
+    @format_arguments = [:title, :percentage, :bar, :stat_for_long_run]
   end
 
   def format= (format)
