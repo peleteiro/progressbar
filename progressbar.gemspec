@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "progressbar"
-  s.version     = "0.9.2"
+  s.version     = "0.10.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Satoru Takabayashi", "Jose Peleteiro"]
   s.email       = ["satoru@0xcc.net", "jose@peleteiro.net"]
