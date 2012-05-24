@@ -28,10 +28,16 @@ The latest version of Ruby/ProgressBar is available at
   => (ProgressBar: 0/100)
   >> (1..100).each{|x| sleep(0.1); pbar.set(x)}; pbar.finish
   test:           67% |oooooooooooooooooooooooooo              | ETA:  00:00:03
+  
+  >> ProgressBar.new("test", 100) do |pbar|
+  >>   100.times { sleep(0.1); pbar.inc }
+  >> end
+  test:          100% |oooooooooooooooooooooooooooooooooooooooo| Time: 00:00:10
+  
 
 == API
 
---- ProgressBar#new (title, total, out = STDERR)
+--- ProgressBar#new (title, total, out = STDERR, &block)
     Display the initial progress bar and return a
     ProgressBar object.  ((|title|)) specifies the title,
     and ((|total|)) specifies the total cost of processing.
@@ -40,6 +46,9 @@ The latest version of Ruby/ProgressBar is available at
     The display of the progress bar is updated when one or
     more percent is proceeded or one or more seconds are
     elapsed from the previous display.
+
+    It also accepts a block in case you prefer not needing
+    to .finish the bar (see example above).
 
 --- ProgressBar#inc (step = 1)
     Increase the internal counter by ((|step|)) and update
