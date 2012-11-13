@@ -8,6 +8,16 @@ class ProgressBarTest < Test::Unit::TestCase
     ProgressBar.new(title, total)
   end
 
+  def test_initialize_with_block
+    yielded = false
+    bar = ProgressBar.new('test', 10) do |bar|
+      yielded = true
+      assert_equal 0, bar.current
+    end
+    assert yielded
+    assert bar.finished?
+  end
+
   def test_bytes
     total = 1024 * 1024
     pbar = do_make_progress_bar("test(bytes)", total)
