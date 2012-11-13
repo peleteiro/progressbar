@@ -28,6 +28,13 @@ class ProgressBar
     @format_arguments = [:title, :percentage, :bar, :stat]
     clear
     show
+    if block_given?
+      begin
+        yield self
+      ensure
+        finish
+      end
+    end
   end
 
   attr_reader   :title
