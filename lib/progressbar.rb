@@ -10,7 +10,7 @@
 #
 
 class ProgressBar
-  VERSION = "0.11.0"
+  VERSION = "0.12.0"
 
   def initialize (title, total, out = STDERR)
     @title = title
