@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/peleteiro/progressbar"
   s.summary     = "Ruby/ProgressBar is a text progress bar library for Ruby."
   s.description = "Ruby/ProgressBar is a text progress bar library for Ruby. It can indicate progress with percentage, a progress bar, and estimated remaining time."
+  s.license     = "Ruby"
 
   s.required_rubygems_version = ">= 1.3.6"
 
