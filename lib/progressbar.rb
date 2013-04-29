@@ -12,6 +12,11 @@
 class ProgressBar
   VERSION = "0.20.0"
 
+  RED = "\033[31m"
+  GREEN = "\033[32m"
+  YELLOW = "\033[33m"
+  NO_COLOR = "\033[0m"
+
   def initialize (title, total, out = STDERR)
     @title = title
     @total = total
@@ -26,6 +31,7 @@ class ProgressBar
     @title_width = 14
     @format = "%-#{@title_width}s %3d%% %s %s"
     @format_arguments = [:title, :percentage, :bar, :stat]
+    @color = NO_COLOR
     clear
     show
     if block_given?
@@ -39,6 +45,7 @@ class ProgressBar
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
+  attr_accessor :color
 
 private
 
@@ -186,7 +193,7 @@ private
 
     width = get_term_width
     if line.length == width - 1
-      @out.print(line + eol)
+      @out.print(@color + line + eol + NO_COLOR)
       @out.flush
     elsif line.length >= width
       @terminal_width = [@terminal_width - (line.length - width + 1), 0].max

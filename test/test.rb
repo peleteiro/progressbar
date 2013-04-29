@@ -106,7 +106,18 @@ class ProgressBarTest < Test::Unit::TestCase
     }
     pbar.finish
   end
-  
+
+  def test_color
+    total = 100
+    pbar = do_make_progress_bar("test(color)", total)
+    pbar.color = ProgressBar::GREEN
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
+
   def test_with_block
     total = 100
     do_make_progress_bar("test(block)", total) do |pbar|
