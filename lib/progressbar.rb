@@ -10,7 +10,7 @@
 #
 
 class ProgressBar
-  VERSION = "0.20.0"
+  VERSION = "0.21.0"
 
   def initialize (title, total, out = STDERR)
     @title = title
@@ -160,12 +160,18 @@ private
 
   DEFAULT_WIDTH = 80
   def get_term_width
-    if ENV['COLUMNS'] =~ /^\d+$/
+    term_width = if ENV['COLUMNS'] =~ /^\d+$/
       ENV['COLUMNS'].to_i
     elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && shell_command_exists?('tput')
       `tput cols`.to_i
     elsif STDIN.tty? && shell_command_exists?('stty')
       `stty size`.scan(/\d+/).map { |s| s.to_i }[1]
+    else
+      DEFAULT_WIDTH
+    end
+
+    if term_width > 0
+      term_width
     else
       DEFAULT_WIDTH
     end
