@@ -10,7 +10,7 @@
 #
 
 class ProgressBar
-  VERSION = "0.21.0"
+  VERSION = "0.21.1"
 
   def initialize (title, total, out = STDERR)
     @title = title
@@ -23,7 +23,7 @@ class ProgressBar
     @finished_p = false
     @start_time = Time.now
     @previous_time = @start_time
-    @title_width = 14
+    @title_width = (get_term_width - 80) >= 16 ? get_term_width - 80 : 16
     @format = "%-#{@title_width}s %3d%% %s %s"
     @format_arguments = [:title, :percentage, :bar, :stat]
     clear
@@ -39,6 +39,15 @@ class ProgressBar
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
+  attr_writer   :title_width
+
+  def title_width=(new_width)
+    @title_width = if new_width >= 16 then
+                     (get_term_width - 80) >= 16 ? get_term_width - 80 : 16
+                   else
+                     16
+                   end
+  end
 
 private
 
