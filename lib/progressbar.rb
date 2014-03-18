@@ -18,6 +18,7 @@ class ProgressBar
     @out = out
     @terminal_width = 80
     @bar_mark = "o"
+    @bar_fill = ' '
     @current = 0
     @previous = 0
     @finished_p = false
@@ -39,6 +40,7 @@ class ProgressBar
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
+  attr_writer   :bar_fill
   attr_writer   :title_width
 
   def title_width=(new_width)
@@ -49,13 +51,17 @@ class ProgressBar
                    end
   end
 
+  def bar_fill=(c)
+    @bar_fill = c.nil? ? ' ' : c[0]
+  end
+
 private
 
   def fmt_bar
     bar_width = do_percentage * @terminal_width / 100
     sprintf("|%s%s|",
             @bar_mark * bar_width,
-            " " *  (@terminal_width - bar_width))
+            @bar_fill *  (@terminal_width - bar_width))
   end
 
   def fmt_percentage
