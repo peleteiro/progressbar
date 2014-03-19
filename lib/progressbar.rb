@@ -17,7 +17,7 @@ class ProgressBar
     @total = total
     @out = out
     @terminal_width = 80
-    @bar_mark = "o"
+    @bar_mark = 'o'
     @bar_fill = ' '
     @current = 0
     @previous = 0
@@ -58,9 +58,13 @@ class ProgressBar
 private
 
   def fmt_bar
-    bar_width = do_percentage * @terminal_width / 100
-    sprintf("|%s%s|",
-            @bar_mark * bar_width,
+    pct = do_percentage
+    bar_width = pct * @terminal_width / 100
+    sub_mark = (((@terminal_width * @bar_mark.length) * ((pct.to_f)/100) ) % @bar_mark.length).floor
+    sub_width = 0
+    sub_width = 1 unless pct == 100
+    sprintf("|%s%s%s|",
+            @bar_mark[-1] * bar_width, @bar_mark[sub_mark] * sub_width,
             @bar_fill *  (@terminal_width - bar_width))
   end
 
