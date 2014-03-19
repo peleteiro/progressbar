@@ -25,7 +25,7 @@ class ProgressBar
     @start_time = Time.now
     @previous_time = @start_time
     @title_width = (get_term_width - 80) >= 16 ? get_term_width - 80 : 16
-    @title_width = title.length if @title_width > title.width
+    @title_width = title.length + 1 if @title_width > title.length
     @format = "%-#{@title_width}s %3d%% %s %s"
     @format_arguments = [:title, :percentage, :bar, :stat]
     clear
