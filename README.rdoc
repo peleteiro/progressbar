@@ -89,6 +89,11 @@ The latest version of Ruby/ProgressBar is available at
     Use adaptative running average to compute ETA, more effective for
     long-running jobs or jobs whose speed may vary.
 
+--- ProgressBar#bar_mark (char)
+    Set the progress bar marker
+
+--- ProgressBar#bar_fill (char)
+    Set the progress bar empty filler
 
 ReverseProgressBar class is also available.  The
 functionality is identical to ProgressBar but the direction

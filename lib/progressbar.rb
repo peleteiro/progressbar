@@ -10,20 +10,22 @@
 #
 
 class ProgressBar
-  VERSION = "0.21.0"
+  VERSION = "0.21.1"
 
   def initialize (title, total, out = STDERR)
     @title = title
     @total = total
     @out = out
     @terminal_width = 80
-    @bar_mark = "o"
+    @bar_mark = 'o'
+    @bar_fill = ' '
     @current = 0
     @previous = 0
     @finished_p = false
     @start_time = Time.now
     @previous_time = @start_time
-    @title_width = 14
+    @title_width = (get_term_width - 80) >= 16 ? get_term_width - 80 : 16
+    @title_width = title.length + 1 if @title_width > title.length
     @format = "%-#{@title_width}s %3d%% %s %s"
     @format_arguments = [:title, :percentage, :bar, :stat]
     clear
@@ -39,14 +41,32 @@ class ProgressBar
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
+  attr_writer   :bar_fill
+  attr_writer   :title_width
+
+  def title_width=(new_width)
+    @title_width = if new_width >= 16 then
+                     (get_term_width - 80) >= 16 ? get_term_width - 80 : 16
+                   else
+                     16
+                   end
+  end
+
+  def bar_fill=(c)
+    @bar_fill = (c.nil? or c.empty?) ? ' ' : c[0]
+  end
 
 private
 
   def fmt_bar
-    bar_width = do_percentage * @terminal_width / 100
-    sprintf("|%s%s|",
-            @bar_mark * bar_width,
-            " " *  (@terminal_width - bar_width))
+    pct = do_percentage
+    bar_width = pct * @terminal_width / 100
+    sub_mark = (((@terminal_width * @bar_mark.length) * ((pct.to_f)/100) ) % @bar_mark.length).floor
+    sub_width = 0
+    sub_width = 1 unless pct == 100
+    sprintf("|%s%s%s|",
+            @bar_mark[-1] * bar_width, @bar_mark[sub_mark] * sub_width,
+            @bar_fill *  (@terminal_width - bar_width))
   end
 
   def fmt_percentage
