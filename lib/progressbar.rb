@@ -52,7 +52,7 @@ class ProgressBar
   end
 
   def bar_fill=(c)
-    @bar_fill = c.nil? ? ' ' : c[0]
+    @bar_fill = (c.nil? or c.empty?) ? ' ' : c[0]
   end
 
 private
