@@ -48,7 +48,7 @@ class ProgressBar
     end
 
     p = self.new(label, size)
-    Enumerator.new { |cb| ret = enum.each { |*args| p.inc; cb.yield(*args) }; p.finish; ret }
+    Enumerator.new(size) { |cb| ret = enum.each { |*args| p.inc; cb.yield(*args) }; p.finish; ret }
   end
 
 private
