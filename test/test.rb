@@ -123,3 +123,26 @@ class ReversedProgressBarTest < ProgressBarTest
     ReversedProgressBar.new(title, total, &block)
   end
 end
+
+# requires functionality introduced in ruby 2.0
+if defined?(Enumerator) && Enumerator.instance_methods.include?(:size)
+  require 'progressbar/iterator'
+
+  class ProgressBarTest < Test::Unit::TestCase
+    def test_new_enum
+      res = (0..50).map.progressbar("new_enum").each { |x| x + 1 }
+      assert_equal((1..51).to_a, res)
+    end
+
+    def test_direct_block
+      res = (0..50).map.progressbar("direct") { |x| x + 1 }
+      assert_equal((1..51).to_a, res)
+    end
+
+    def test_explicit_create
+      enum = ProgressBar.iterator((0..50), "explicit")
+      res = enum.map { |x| x + 1 }
+      assert_equal((1..51).to_a, res)
+    end
+  end
+end
