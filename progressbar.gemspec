@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
 
   s.add_development_dependency "bundler", ">= 1.0.0"
-  s.add_development_dependency "minitest", ">= 0"
+  s.add_development_dependency "test-unit", ">= 2.5"
+  s.add_development_dependency "minitest", ">= 2.2"
   s.add_development_dependency "yard", ">= 0"
   s.add_development_dependency "rake", ">= 0"
   s.add_development_dependency "simplecov", ">= 0.3.5"

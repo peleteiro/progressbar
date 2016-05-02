@@ -40,6 +40,17 @@ class ProgressBar
   attr_accessor :start_time
   attr_writer   :bar_mark
 
+  def self.iterator(enum, label = "Progress")
+    size = enum.size
+    if size.nil? || size == Float::INFINITY
+      # Might be interesting to return an "indeterminite" progressbar instead
+      return enum
+    end
+
+    p = self.new(label, size)
+    Enumerator.new(size) { |cb| ret = enum.each { |*args| p.inc; cb.yield(*args) }; p.finish; ret }
+  end
+
 private
 
   def fmt_bar
